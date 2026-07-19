@@ -1,44 +1,112 @@
 package ir.nas.repository;
 
+import java.sql.ResultSet;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import ir.nas.model.Supplier;
+import ir.nas.util.DatabaseConnection;
 
 public final class SupplierRepository implements Repository<Integer, Supplier>
 {
     @Override
-    public Optional<Supplier> delete(Integer id)
+    public Optional<Supplier> delete(final Integer id)
     {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        final String DELETE_QUERY_STRING = "DELETE FROM supplier WHERE id = ?;";
+
+        return DatabaseConnection.excuteQuery(DELETE_QUERY_STRING, (ps) -> {
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next())
+                    return Optional.of(
+                            Supplier.builder()
+                                    .id(rs.getInt("id"))
+                                    .companyName(rs.getString("company_name"))
+                                    .phone(rs.getString("phone"))
+                                    .build());
+
+                return Optional.empty();
+            }
+        });
     }
 
     @Override
     public Set<Supplier> findAll()
     {
-        // TODO Auto-generated method stub
-        return null;
+        Set<Supplier> suppliers = new HashSet<>();
+        final String FIND_ALL_QUERY_STRING = "SELECT * FROM supplier;";
+
+        return DatabaseConnection.excuteQuery(FIND_ALL_QUERY_STRING, (ps) -> {
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next())
+                    suppliers.add(
+                            Supplier.builder()
+                                    .id(rs.getInt("id"))
+                                    .companyName(rs.getString("company_name"))
+                                    .phone(rs.getString("phone"))
+                                    .build());
+
+                return suppliers;
+            }
+        });
     }
 
     @Override
-    public Optional<Supplier> read(Integer id)
+    public Optional<Supplier> read(final Integer id)
     {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        final String READ_QUERY_STRING = "SELECT * FORM supplier WHERE id = ?;";
+
+        return DatabaseConnection.excuteQuery(READ_QUERY_STRING, (ps) -> {
+            try (ResultSet rs = ps.executeQuery()) {
+
+                ps.setInt(1, id);
+
+                if (rs.next())
+                    return Optional.of(
+                            Supplier.builder()
+                                    .id(rs.getInt("id"))
+                                    .companyName(rs.getString("company_name"))
+                                    .phone(rs.getString("phone"))
+                                    .build());
+
+                return Optional.empty();
+            }
+        });
     }
 
     @Override
-    public Integer save(Supplier t)
+    public Integer save(final Supplier t)
     {
-        // TODO Auto-generated method stub
-        return null;
+        final String SAVE_QUERY_STRING = "INSERT INTO supplier (company_name, phone) VALUES (?, ?);";
+
+        return DatabaseConnection.excuteQueryWithGenerateKey(SAVE_QUERY_STRING, (ps) -> {
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+
+                ps.setString(1, t.getCompanyName());
+                ps.setString(2, t.getPhone());
+
+                if (rs.next())
+                    return rs.getInt("id");
+
+                return -1;
+            }
+        });
     }
 
     @Override
-    public int update(Supplier t)
+    public boolean update(final Supplier t)
     {
-        // TODO Auto-generated method stub
-        return 0;
+        final String UDPATE_QUERY_STRING = "UPDATE supplier SET (company_name, phone) = (?, ?);";
+
+        return DatabaseConnection.excuteQuery(UDPATE_QUERY_STRING, (ps) -> {
+
+            ps.setString(1, t.getCompanyName());
+            ps.setString(2, t.getPhone());
+
+            return ps.executeUpdate() > 0;
+        });
     }
 }

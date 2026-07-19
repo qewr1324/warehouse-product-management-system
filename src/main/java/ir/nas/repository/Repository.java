@@ -9,7 +9,7 @@ public interface Repository<ID, T>
 
     Optional<T> read(ID id);
 
-    int update(T t);
+    boolean update(T t);
 
     Optional<T> delete(ID id);
 

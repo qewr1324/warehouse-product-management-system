@@ -1,44 +1,117 @@
 package ir.nas.repository;
 
+import java.sql.ResultSet;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import ir.nas.model.Product;
+import ir.nas.util.DatabaseConnection;
 
 public final class ProductRepository implements Repository<Integer, Product>
 {
     @Override
-    public Optional<Product> delete(Integer id)
+    public Optional<Product> delete(final Integer id)
     {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        final String DELETE_QUERY_STRING = "DELETE FROM product WHERE id = ?;";
+
+        return DatabaseConnection.excuteQuery(DELETE_QUERY_STRING, (ps) -> {
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next())
+                    return Optional.of(
+                            Product.builder()
+                                    .id(rs.getInt("id"))
+                                    .name(rs.getString("name"))
+                                    .price(rs.getDouble("price"))
+                                    .quantity(rs.getInt("quantity"))
+                                    .build());
+
+                return Optional.empty();
+            }
+        });
     }
 
     @Override
     public Set<Product> findAll()
     {
-        // TODO Auto-generated method stub
-        return null;
+        Set<Product> products = new HashSet<>();
+        final String FIND_ALL_QUERY_STRING = "SELECT * FROM product;";
+
+        return DatabaseConnection.excuteQuery(FIND_ALL_QUERY_STRING, (ps) -> {
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next())
+                    products.add(
+                            Product.builder()
+                                    .id(rs.getInt("id"))
+                                    .name(rs.getString("name"))
+                                    .price(rs.getDouble("price"))
+                                    .quantity(rs.getInt("quantity"))
+                                    .build());
+
+                return products;
+            }
+        });
     }
 
     @Override
-    public Optional<Product> read(Integer id)
+    public Optional<Product> read(final Integer id)
     {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        final String READ_QUERY_STRING = "SELECT * FORM product WHERE id = ?;";
+
+        return DatabaseConnection.excuteQuery(READ_QUERY_STRING, (ps) -> {
+            try (ResultSet rs = ps.executeQuery()) {
+
+                ps.setInt(1, id);
+
+                if (rs.next())
+                    return Optional.of(
+                            Product.builder()
+                                    .id(rs.getInt("id"))
+                                    .name(rs.getString("name"))
+                                    .price(rs.getDouble("price"))
+                                    .quantity(rs.getInt("quantity"))
+                                    .build());
+
+                return Optional.empty();
+            }
+        });
     }
 
     @Override
-    public Integer save(Product t)
+    public Integer save(final Product t)
     {
-        // TODO Auto-generated method stub
-        return null;
+        final String SAVE_QUERY_STRING = "INSERT INTO product (name, price, quantity) VALUES (?, ?, ?);";
+
+        return DatabaseConnection.excuteQueryWithGenerateKey(SAVE_QUERY_STRING, (ps) -> {
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+
+                ps.setString(1, t.getName());
+                ps.setDouble(2, t.getPrice());
+                ps.setInt(3, t.getQuantity());
+
+                if (rs.next())
+                    return rs.getInt("id");
+
+                return -1;
+            }
+        });
     }
 
     @Override
-    public int update(Product t)
+    public boolean update(final Product t)
     {
-        // TODO Auto-generated method stub
-        return 0;
+        final String UDPATE_QUERY_STRING = "UPDATE product SET (name, price, quantity) = (?, ?, ?);";
+
+        return DatabaseConnection.excuteQuery(UDPATE_QUERY_STRING, (ps) -> {
+
+            ps.setString(1, t.getName());
+            ps.setDouble(2, t.getPrice());
+            ps.setInt(3, t.getQuantity());
+
+            return ps.executeUpdate() > 0;
+        });
     }
 }
