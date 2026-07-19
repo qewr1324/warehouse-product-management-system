@@ -4,14 +4,14 @@ import java.util.Set;
 
 import ir.nas.exception.service.InvalidDataException;
 import ir.nas.model.Product;
-import ir.nas.repository.impl.ProductRepositoryImpl;
+import ir.nas.repository.ProductRepository;
 import ir.nas.util.validation.Validator;
 
 public final class ProductService
 {
-    private final ProductRepositoryImpl pRepository;
+    private final ProductRepository pRepository;
 
-    public ProductService(final ProductRepositoryImpl pRepository)
+    public ProductService(final ProductRepository pRepository)
     {
         this.pRepository = pRepository;
     }
@@ -68,6 +68,7 @@ public final class ProductService
     {
         try {
             this.validProduct(product);
+            this.validProductId(product.getId());
 
             Product userProduct = this.findProduct(product.getId());
             if (userProduct == null)

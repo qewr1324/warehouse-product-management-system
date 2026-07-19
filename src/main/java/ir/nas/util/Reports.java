@@ -17,6 +17,13 @@ public class Reports
         this.pService = pService;
     }
 
+    public void printReports()
+    {
+        System.out.println("Total Number Of Product: " + this.totalNumberOfProducts());
+        System.out.println("Avarage Product Price: " + this.avarageProductPrice());
+        System.out.println("Most Expensive Product: " + this.mostExpensiveProduct());
+    }
+
     public long totalNumberOfProducts()
     {
         return this.pService.allProducts()

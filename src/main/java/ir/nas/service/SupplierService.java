@@ -67,6 +67,7 @@ public final class SupplierService
     {
         try {
             this.validSupplier(supplier);
+            this.validSupplierId(supplier.getId());
 
             Supplier userSupplier = this.findSupplier(supplier.getId());
             if (userSupplier == null)
