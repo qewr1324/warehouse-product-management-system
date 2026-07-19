@@ -7,7 +7,7 @@ import java.util.Set;
 
 import ir.nas.model.Supplier;
 import ir.nas.repository.Repository;
-import ir.nas.util.DatabaseConnection;
+import ir.nas.util.db.DatabaseConnection;
 
 public final class SupplierRepositoryImpl implements Repository<Integer, Supplier>
 {

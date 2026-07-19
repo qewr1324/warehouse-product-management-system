@@ -7,7 +7,7 @@ import java.util.Set;
 
 import ir.nas.model.Product;
 import ir.nas.repository.ProductRepository;
-import ir.nas.util.DatabaseConnection;
+import ir.nas.util.db.DatabaseConnection;
 
 public final class ProductRepositoryImpl implements ProductRepository
 {

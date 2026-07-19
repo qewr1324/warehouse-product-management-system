@@ -1,4 +1,4 @@
-package ir.nas.util;
+package ir.nas.util.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
