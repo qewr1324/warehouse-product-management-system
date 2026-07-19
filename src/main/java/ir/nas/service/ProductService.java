@@ -49,11 +49,35 @@ public final class ProductService
         }
     }
 
+    public Product findProduct(int id)
+    {
+        try {
+            this.validProductId(id);
+            return this.pRepository.read(id).orElseGet(() -> {
+                System.out.println("Product Not Find!");
+                return (Product) null;
+            });
+
+        } catch (InvalidDataException e) {
+            System.out.println("Service Update Product Validation Error: ".concat(e.getMessage()));
+            return (Product) null;
+        }
+    }
+
     public boolean updateProduct(Product product)
     {
         try {
             this.validProduct(product);
-            return this.pRepository.update(product);
+
+            Product userProduct = this.findProduct(product.getId());
+            if (userProduct == null)
+                return false;
+
+            userProduct.setName(product.getName());
+            userProduct.setPrice(product.getPrice());
+            userProduct.setQuantity(product.getQuantity());
+
+            return this.pRepository.update(userProduct);
 
         } catch (InvalidDataException e) {
             System.out.println("Service Update Product Validation Error: ".concat(e.getMessage()));

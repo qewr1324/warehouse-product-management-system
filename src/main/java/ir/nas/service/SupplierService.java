@@ -3,7 +3,6 @@ package ir.nas.service;
 import java.util.Set;
 
 import ir.nas.exception.service.InvalidDataException;
-import ir.nas.model.Product;
 import ir.nas.model.Supplier;
 import ir.nas.repository.impl.SupplierRepositoryImpl;
 import ir.nas.util.validation.Validator;
@@ -49,11 +48,34 @@ public final class SupplierService
         }
     }
 
+    public Supplier findSupplier(int id)
+    {
+        try {
+            this.validSupplierId(id);
+            return this.sRepository.read(id).orElseGet(() -> {
+                System.out.println("Supplier Not Find!");
+                return (Supplier) null;
+            });
+
+        } catch (InvalidDataException e) {
+            System.out.println("Service Update Supplier Validation Error: ".concat(e.getMessage()));
+            return (Supplier) null;
+        }
+    }
+
     public boolean updateSupplier(Supplier supplier)
     {
         try {
             this.validSupplier(supplier);
-            return this.sRepository.update(supplier);
+
+            Supplier userSupplier = this.findSupplier(supplier.getId());
+            if (userSupplier == null)
+                return false;
+
+            userSupplier.setCompanyName(supplier.getCompanyName());
+            userSupplier.setPhone(supplier.getPhone());
+
+            return this.sRepository.update(userSupplier);
 
         } catch (InvalidDataException e) {
             System.out.println("Service Update Supplier Validation Error: ".concat(e.getMessage()));
