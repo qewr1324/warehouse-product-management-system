@@ -1,4 +1,4 @@
-package ir.nas.repository;
+package ir.nas.repository.impl;
 
 import java.sql.ResultSet;
 import java.util.HashSet;
@@ -6,9 +6,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import ir.nas.model.Supplier;
+import ir.nas.repository.Repository;
 import ir.nas.util.DatabaseConnection;
 
-public final class SupplierRepository implements Repository<Integer, Supplier>
+public final class SupplierRepositoryImpl implements Repository<Integer, Supplier>
 {
     @Override
     public Optional<Supplier> delete(final Integer id)
