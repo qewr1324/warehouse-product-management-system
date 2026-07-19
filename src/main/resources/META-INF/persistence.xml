@@ -11,7 +11,7 @@
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
             <property name="jakarta.persistence.jdbc.url"
-                value="jdbc:postgresql://localhost:5432/warehourse_pms" />
+                value="jdbc:postgresql://localhost:5432/warehouse_product_management_system" />
             <property name="jakarta.persistence.jdbc.user" value="postgres" />
             <property name="jakarta.persistence.jdbc.password" value="" />
         </properties>
