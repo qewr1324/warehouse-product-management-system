@@ -1,5 +1,6 @@
 package ir.nas.service;
 
+import ir.nas.exception.service.InvalidDataException;
 import ir.nas.model.Supplier;
 import ir.nas.repository.impl.SupplierRepositoryImpl;
 import ir.nas.util.validation.Validator;
@@ -13,7 +14,7 @@ public final class SupplierService
         this.sRepository = sRepository;
     }
 
-    private void validProduct(Supplier p)
+    private void validProduct(Supplier p) throws InvalidDataException
     {
         Validator.of()
                 .requireNotNull(p.getCompanyName())
@@ -21,10 +22,12 @@ public final class SupplierService
                 .validate();
     }
 
-    private void validProductId(int id)
+    private void validProductId(int id) throws InvalidDataException
     {
         Validator.of()
                 .requireNotNegativeNumber(id)
                 .validate();
     }
+
+    
 }

@@ -1,5 +1,8 @@
 package ir.nas.service;
 
+import java.util.Set;
+
+import ir.nas.exception.service.InvalidDataException;
 import ir.nas.model.Product;
 import ir.nas.repository.impl.ProductRepositoryImpl;
 import ir.nas.util.validation.Validator;
@@ -13,7 +16,7 @@ public final class ProductService
         this.pRepository = pRepository;
     }
 
-    private void validProduct(Product p)
+    private void validProduct(Product p) throws InvalidDataException
     {
         Validator.of()
                 .requireNotNull(p.getName())
@@ -22,12 +25,15 @@ public final class ProductService
                 .validate();
     }
 
-    private void validProductId(int id)
+    private void validProductId(int id) throws InvalidDataException
     {
         Validator.of()
                 .requireNotNegativeNumber(id)
                 .validate();
     }
 
-    
+    public Set<Product> allProducts()
+    {
+        return this.pRepository.findAll();
+    }
 }

@@ -1,6 +1,6 @@
 package ir.nas.util.validation;
 
-import ir.nas.exception.service.InvalidInputException;
+import ir.nas.exception.service.InvalidDataException;
 
 public final class Validator
 {
@@ -45,9 +45,9 @@ public final class Validator
         return this;
     }
 
-    public void validate()
+    public void validate() throws InvalidDataException
     {
         if (!this.isValid)
-            throw new InvalidInputException(this.message);
+            throw new InvalidDataException(this.message);
     }
 }
