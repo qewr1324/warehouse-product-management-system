@@ -36,4 +36,43 @@ public final class ProductService
     {
         return this.pRepository.findAll();
     }
+
+    public int addProduct(Product product)
+    {
+        try {
+            this.validProduct(product);
+            return this.pRepository.save(product).intValue();
+
+        } catch (InvalidDataException e) {
+            System.out.println("Service Add Product Validation Error: ".concat(e.getMessage()));
+            return -1;
+        }
+    }
+
+    public boolean updateProduct(Product product)
+    {
+        try {
+            this.validProduct(product);
+            return this.pRepository.update(product);
+
+        } catch (InvalidDataException e) {
+            System.out.println("Service Update Product Validation Error: ".concat(e.getMessage()));
+            return false;
+        }
+    }
+
+    public Product deleteProduct(int id)
+    {
+        try {
+            this.validProductId(id);
+            return this.pRepository.delete(id).orElseGet(() -> {
+                System.out.println("Delete Error!");
+                return (Product) null;
+            });
+
+        } catch (InvalidDataException e) {
+            System.out.println("Service Delete Product Validation Error: ".concat(e.getMessage()));
+            return (Product) null;
+        }
+    }
 }
