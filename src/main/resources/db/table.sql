@@ -9,7 +9,7 @@ CREATE TABLE product (
 );
 
 CREATE TABLE supplier (
-    if BIGSERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     company_name VARCHAR(50) NOT NULL,
     phone VARCHAR(11) CHECK (LENGTH(phone) = 11)
 );
