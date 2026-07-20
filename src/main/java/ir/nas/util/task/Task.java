@@ -46,13 +46,15 @@ public final class Task
         Thread thread_1 = new Thread(task_1);
         Thread thread_2 = new Thread(task_2);
 
-        thread_1.start();
+        System.out.println("Sleep 3 sec...");
         Thread.sleep(3000);
-
-        thread_2.start();
-        Thread.sleep(1000);
-
+        thread_1.start();
         thread_1.join();
+
+        System.out.println("Sleep 1 sec...");
+        Thread.sleep(1000);
+        thread_2.start();
+
         thread_2.join();
 
         System.out.println("Finish Threads. All products have been registered.");
