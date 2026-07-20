@@ -14,7 +14,7 @@ public final class SupplierRepositoryImpl implements Repository<Integer, Supplie
     @Override
     public Optional<Supplier> delete(final Integer id)
     {
-        final String DELETE_QUERY_STRING = "DELETE FROM supplier WHERE id = ?;";
+        final String DELETE_QUERY_STRING = "DELETE FROM supplier WHERE id = ? RETURNING *;";
 
         return DatabaseConnection.excuteQuery(DELETE_QUERY_STRING, (ps) -> {
             ps.setInt(1, id);
@@ -92,10 +92,8 @@ public final class SupplierRepositoryImpl implements Repository<Integer, Supplie
 
             if (excute > 0)
                 try (ResultSet rs = ps.getGeneratedKeys()) {
-
                     if (rs.next())
                         return rs.getInt("id");
-
                 }
 
             return -1;

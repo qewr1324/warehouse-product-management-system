@@ -115,7 +115,7 @@ public class Main
                 .build();
 
         int id = sService.addSupplier(supplier);
-        System.out.println("Added Supplier: " + id);
+        System.out.println("Added Supplier: [id]" + id);
     }
 
     private static void deleteProduct()
@@ -164,7 +164,7 @@ public class Main
                 .build();
 
         int id = pService.addProduct(product);
-        System.out.println("Added Product: " + id);
+        System.out.println("Added Product: [id]" + id);
     }
 
     private static <T> T userInput(String message, java.util.function.Supplier<T> supplier)

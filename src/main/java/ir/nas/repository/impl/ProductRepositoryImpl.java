@@ -14,7 +14,7 @@ public final class ProductRepositoryImpl implements ProductRepository
     @Override
     public Optional<Product> delete(final Integer id)
     {
-        final String DELETE_QUERY_STRING = "DELETE FROM product WHERE id = ?;";
+        final String DELETE_QUERY_STRING = "DELETE FROM product WHERE id = ? RETURNING *;";
 
         return DatabaseConnection.excuteQuery(DELETE_QUERY_STRING, (ps) -> {
             ps.setInt(1, id);
