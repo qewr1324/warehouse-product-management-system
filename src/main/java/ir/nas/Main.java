@@ -65,6 +65,7 @@ public class Main
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                scanner.nextLine();
             }
         }
         scanner.close();
@@ -74,7 +75,7 @@ public class Main
     {
         showAllSupplier();
 
-        int id = userInput("Enter Your Supplier-ID: ", scanner.nextInt());
+        int id = userInput("Enter Your Supplier-ID: ", () -> scanner.nextInt());
         Supplier supplier = sService.deleteSupplier(id);
 
         System.out.println("Deleted Supplier: ".concat(supplier.getCompanyName()));
@@ -84,13 +85,13 @@ public class Main
     {
         showAllSupplier();
 
-        int id = userInput("Enter Your Supplier-ID: ", scanner.nextInt());
+        int id = userInput("Enter Your Supplier-ID: ", () -> scanner.nextInt());
 
         System.out.println("Enter Your Supplier Info: ");
         Supplier userSupplier = Supplier.builder()
                 .id(id)
-                .companyName(userInput("Enter Your Supplier-Company-Name [string]: ", scanner.nextLine()))
-                .phone(userInput("Enter Your Supplier-Phone-Number [number-11]: ", scanner.nextLine()))
+                .companyName(userInput("Enter Your Supplier-Company-Name [string]: ", () -> scanner.nextLine()))
+                .phone(userInput("Enter Your Supplier-Phone-Number [number-11]: ", () -> scanner.nextLine()))
                 .build();
 
         boolean isUpdate = sService.updateSupplier(userSupplier);
@@ -109,8 +110,8 @@ public class Main
     private static void addSupplier()
     {
         Supplier supplier = Supplier.builder()
-                .companyName(userInput("Enter Your Supplier-Company-Name [string]: ", scanner.nextLine()))
-                .phone(userInput("Enter Your Supplier-Phone-Number [number-11]: ", scanner.nextLine()))
+                .companyName(userInput("Enter Your Supplier-Company-Name [string]: ", () -> scanner.nextLine()))
+                .phone(userInput("Enter Your Supplier-Phone-Number [number-11]: ", () -> scanner.nextLine()))
                 .build();
 
         int id = sService.addSupplier(supplier);
@@ -121,7 +122,7 @@ public class Main
     {
         showAllProduct();
 
-        int id = userInput("Enter Your Product-ID: ", scanner.nextInt());
+        int id = userInput("Enter Your Product-ID: ", () -> scanner.nextInt());
         Product product = pService.deleteProduct(id);
 
         System.out.println("Deleted Product: ".concat(product.getName()));
@@ -131,14 +132,14 @@ public class Main
     {
         showAllProduct();
 
-        int id = userInput("Enter Your Product-ID: ", scanner.nextInt());
+        int id = userInput("Enter Your Product-ID: ", () -> scanner.nextInt());
 
         System.out.println("Enter Your Product Info: ");
         Product userProduct = Product.builder()
                 .id(id)
-                .name(userInput("Enter Your Product-Name [string]: ", scanner.nextLine()))
-                .price(userInput("Enter Your Product-Price [double]: ", scanner.nextDouble()))
-                .quantity(userInput("Enter Your Product-Quantity [int]: ", scanner.nextInt()))
+                .name(userInput("Enter Your Product-Name [string]: ", () -> scanner.nextLine()))
+                .price(userInput("Enter Your Product-Price [double]: ", () -> scanner.nextDouble()))
+                .quantity(userInput("Enter Your Product-Quantity [int]: ", () -> scanner.nextInt()))
                 .build();
 
         boolean isUpdate = pService.updateProduct(userProduct);
@@ -157,19 +158,19 @@ public class Main
     private static void addProduct()
     {
         Product product = Product.builder()
-                .name(userInput("Enter Your Product-Name [string]: ", scanner.nextLine()))
-                .price(userInput("Enter Your Product-Price [double]: ", scanner.nextDouble()))
-                .quantity(userInput("Enter Your Product-Quantity [int]: ", scanner.nextInt()))
+                .name(userInput("Enter Your Product-Name [string]: ", () -> scanner.nextLine()))
+                .price(userInput("Enter Your Product-Price [double]: ", () -> scanner.nextDouble()))
+                .quantity(userInput("Enter Your Product-Quantity [int]: ", () -> scanner.nextInt()))
                 .build();
 
         int id = pService.addProduct(product);
         System.out.println("Added Product: " + id);
     }
 
-    private static <T> T userInput(String message, T input)
+    private static <T> T userInput(String message, java.util.function.Supplier<T> supplier)
     {
+        scanner.nextLine();
         System.out.println(message);
-
-        return input;
+        return supplier.get();
     }
 }
