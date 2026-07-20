@@ -58,12 +58,12 @@ public final class SupplierRepositoryImpl implements Repository<Integer, Supplie
     @Override
     public Optional<Supplier> read(final Integer id)
     {
-        final String READ_QUERY_STRING = "SELECT * FORM supplier WHERE id = ?;";
+        final String READ_QUERY_STRING = "SELECT * FROM supplier WHERE id = ?;";
 
         return DatabaseConnection.excuteQuery(READ_QUERY_STRING, (ps) -> {
-            try (ResultSet rs = ps.executeQuery()) {
+            ps.setInt(1, id);
 
-                ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
 
                 if (rs.next())
                     return Optional.of(

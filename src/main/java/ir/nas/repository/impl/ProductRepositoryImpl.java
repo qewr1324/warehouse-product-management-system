@@ -60,13 +60,12 @@ public final class ProductRepositoryImpl implements ProductRepository
     @Override
     public Optional<Product> read(final Integer id)
     {
-        final String READ_QUERY_STRING = "SELECT * FORM product WHERE id = ?;";
+        final String READ_QUERY_STRING = "SELECT * FROM product WHERE id = ?;";
 
         return DatabaseConnection.excuteQuery(READ_QUERY_STRING, (ps) -> {
+            ps.setInt(1, id);
+
             try (ResultSet rs = ps.executeQuery()) {
-
-                ps.setInt(1, id);
-
                 if (rs.next())
                     return Optional.of(
                             Product.builder()
