@@ -17,3 +17,6 @@ CREATE TABLE supplier (
 DROP TABLE product;
 
 DROP TABLE supplier;
+
+
+SELECT * FROM product;

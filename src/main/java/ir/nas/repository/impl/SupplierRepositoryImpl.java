@@ -84,16 +84,21 @@ public final class SupplierRepositoryImpl implements Repository<Integer, Supplie
         final String SAVE_QUERY_STRING = "INSERT INTO supplier (company_name, phone) VALUES (?, ?);";
 
         return DatabaseConnection.excuteQueryWithGenerateKey(SAVE_QUERY_STRING, (ps) -> {
-            try (ResultSet rs = ps.getGeneratedKeys()) {
 
-                ps.setString(1, t.getCompanyName());
-                ps.setString(2, t.getPhone());
+            ps.setString(1, t.getCompanyName());
+            ps.setString(2, t.getPhone());
 
-                if (rs.next())
-                    return rs.getInt("id");
+            int excute = ps.executeUpdate();
 
-                return -1;
-            }
+            if (excute > 0)
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+
+                    if (rs.next())
+                        return rs.getInt("id");
+
+                }
+
+            return -1;
         });
     }
 

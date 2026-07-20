@@ -87,17 +87,20 @@ public final class ProductRepositoryImpl implements ProductRepository
         final String SAVE_QUERY_STRING = "INSERT INTO product (name, price, quantity) VALUES (?, ?, ?);";
 
         return DatabaseConnection.excuteQueryWithGenerateKey(SAVE_QUERY_STRING, (ps) -> {
-            try (ResultSet rs = ps.getGeneratedKeys()) {
 
-                ps.setString(1, t.getName());
-                ps.setDouble(2, t.getPrice());
-                ps.setInt(3, t.getQuantity());
+            ps.setString(1, t.getName());
+            ps.setDouble(2, t.getPrice());
+            ps.setInt(3, t.getQuantity());
 
-                if (rs.next())
-                    return rs.getInt("id");
+            int excute = ps.executeUpdate();
 
-                return -1;
-            }
+            if (excute > 0)
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next())
+                        return rs.getInt("id");
+                }
+
+            return -1;
         });
     }
 
